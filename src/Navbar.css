@@ -1,0 +1,32 @@
+.app__navbar{
+    display: flex;
+    background-color: #0747A6;
+    padding: 5px 20px;
+    align-items: center;
+}
+.app__navbar a{
+    text-decoration: none;
+    color: inherit;
+}
+.nav__items{
+    color: white;
+    margin-left: 30px;
+    padding: 10px;
+}
+.nav__items:first-child{
+    font-size: 25px;
+}
+
+.nav__lastItem{
+    margin-left: auto;
+    color: white;
+}
+.button{
+    background-color: #2684FF;
+    border-radius: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+    outline: none;
+    cursor: pointer;
+}
+
