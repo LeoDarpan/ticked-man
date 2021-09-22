@@ -1,21 +1,79 @@
 import React, { useState, useEffect} from 'react';
+import axios from 'axios';
 import './Signup.css'
 
 function Signup() {
-    const [username, setUsername] = useState('xyz');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('');
-    const [department, setDepartment] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [role, setRole] = useState('PM');
+    const [department, setDepartment] = useState('Webdev');
 
+    const departments = [
+        {
+            label: "Webdev",
+            value: "Webdev"
+        },
+        {
+            label: "SearchUnify",
+            value: "SearchUnify"
+        },
+        {
+            label: "Salesforce",
+            value: "Salesforce"
+        },
+        {
+            label: "Lithium",
+            value: "Lithium"
+        },
+        {
+            label: "Marketo",
+            value: "Marketo"
+        }
+    ];
+
+    const roles = [
+        {
+            label: "Project Manager",
+            value: "PM"
+        },
+        {
+            label: "Team Lead",
+            value: "TL"
+        },
+        {
+            label: "Developer",
+            value: "Dev"
+        }
+    ]
     const signUp = (event) => {
         event.preventDefault();
-
-        console.log(username);
-        console.log(email);
         
-        alert("Thanks for signing up!");
+        const newUser = {
+            username: username,
+            email: email,
+            password: password,
+            role: role,
+            department: department
+        }
 
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setRole('Developer');
+        setDepartment('Webdev')
+        setConfirmPassword('');
+
+        axios.post('http://localhost:8000/user', newUser)
+            .then(response => {
+                console.log(response.data);
+                alert("Sign up successful!")
+            })
+            .catch(err => {
+                //console.log(err.response.data);
+                alert(err.response.data);
+            })
     }
     return (
         <div>
@@ -29,21 +87,23 @@ function Signup() {
 
                 <div className="form-element test">
                     <label htmlFor="name">Role</label>
-                    <select for='role' value = { role } onChange = { event => setRole(event.target.value) }>
-                        <option value="PM">Project Manager</option>
-                        <option value="TL">Team Lead</option>
-                        <option value="Developer" selected>Developer</option>
+                    <select value = { role } onChange = { event => setRole(event.target.value) }>
+                        {
+                            roles.map( option => (
+                                <option value = { option.value}> {option.label}</option>
+                            ))
+                        }
                     </select>
                 </div>
 
                 <div className="form-element test">
                     <label htmlFor="name">Department</label>
                     <select value = { department } onChange = { event => setDepartment(event.target.value)}>
-                        <option value="Webdev">Webdev</option>
-                        <option value="Searchunify">Search Unify</option>
-                        <option value="Salesforce">Salesforce</option>
-                        <option value="lithium">Lithium</option>
-                        <option value="Market">Marketo</option>
+                        {
+                            departments.map(option => (
+                                <option value = {option.value}>{option.label}</option>
+                            ))
+                        }
                     </select>
                 </div>
 
@@ -59,7 +119,7 @@ function Signup() {
 
                 <div className="form-element">
                     <label htmlFor="password">Confirm Password</label>
-                    <input type="password"/>
+                    <input type="password" value = { confirmPassword } onChange = { event => setConfirmPassword(event.target.value) } />
                 </div>
 
                 <div className="form-element">

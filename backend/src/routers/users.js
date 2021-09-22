@@ -3,25 +3,33 @@ const router = express.Router();
 
 
 const User = require('../model/user');
-const auth = require('../middleware/auth')
+const auth = require('../middleware/auth');
+const { response } = require('express');
 
 
 
 router.post('/user', async (req, res) => {
-    let query = req.query && req.query.params
-    console.log('//////////////////query',query)
-    console.log('///////body',req.body && req.body.params)
+    let query = req.query && req.query.params;
+    // console.log('//////////////////query',query);
+    // console.log('///////body',req.body && req.body.params);
     console.log(req.body || query);
-    let user = new User(req.body && req.body.params);
-
     try {
+    let user = new User(req.body);
+
+    
         await user.save();
         //   sendWelcomeEmail(user.email,user.name);
         let token = await user.generateAuthToken();
         res.status(201).send({ user, token });
     } catch (e) {
-        res.status(400).send(e);
+        console.log(e.message)
+        res.status(400).send(e.message);
     }
+});
+
+router.post('/user/users', async (req, res) => {
+    const loggedUsers = '';
+    res.send(loggedUsers);
 });
 
 router.post('/user/login', async (req, res) => {
@@ -36,8 +44,7 @@ router.post('/user/login', async (req, res) => {
     } catch (e) {
         res.status(400).send(e);
     }
-
-})
+});
 
 router.post('/user/logout', auth, async (req, res) => {
     try {
@@ -52,6 +59,6 @@ router.post('/user/logout', auth, async (req, res) => {
         res.status(500).send();
     }
 
-})
+});
 
 module.exports = router
